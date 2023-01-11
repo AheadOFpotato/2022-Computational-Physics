@@ -1,0 +1,1196 @@
+\documentclass[11pt]{article}
+	\usepackage{fontspec, xunicode, xltxtra} 
+	\usepackage{ctex}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{homework1}
+    \author{2000011476 胡逸}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    \section*{tips for reading:}
+    \begin{enumerate}
+    	\item
+    	由于此pdf是由文件夹中的\url{hw1.ipynb}直接导出，可能直接阅读.ipynb文件会更加方便流畅，程序也可直接在其中编译运行。
+    	\item
+    	本文件夹包含了主要包含了一个.ipynb文件与一个.cpp文件。其中.ipynb文件的编译方式是，在vscode中下载Jupyter插件，选择python环境即可进行编译，或者直接使用jupyter notebook软件进行打开；cpp文件的编译方式即为一般的c++文件的编译方式。
+    \end{enumerate}
+    \section{$e^{-x}$展开}
+
+    \subsection{直接展开法}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{fac}\PY{p}{(}\PY{n}{n}\PY{p}{:}\PY{n+nb}{int}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}return factorial(n) \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{result} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{k}{if} \PY{n}{n} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{:}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{result} \PY{o}{=} \PY{n}{result} \PY{o}{*} \PY{n}{i}
+    \PY{k}{return} \PY{n}{result}
+
+
+\PY{k}{def} \PY{n+nf}{expansion}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}return exp(\PYZhy{}x), using direct expansion\PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n+nb}{sum} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n+nb}{sum} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{n}{n}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{n}{n} \PY{o}{/} \PY{n}{fac}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+        \PY{k}{if} \PY{n+nb}{sum} \PY{o}{+} \PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{n}{n}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{n}{n} \PY{o}{/} \PY{n}{fac}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)} \PY{o}{==} \PY{n+nb}{sum} \PY{p}{:} \PY{k}{break}
+        \PY{n}{n} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+    \PY{k}{return} \PY{n+nb}{sum}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{cmath} \PY{k+kn}{import} \PY{n}{log}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{time}
+
+\PY{n}{x} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{y\PYZus{}1} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{y\PYZus{}log} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{110}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+    \PY{n}{y\PYZus{}1}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{expansion}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mf}{7.5}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{121}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y\PYZus{}1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{y\PYZus{}1}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{122}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{semilogy}\PY{p}{(}\PY{n}{x}\PY{p}{,}
+             \PY{n}{y\PYZus{}1}\PY{p}{,}
+             \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,}
+             \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dotted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{direct expansion}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,}
+             \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{hw1_files/hw1_3_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    上图左图是由直接展开法得到的结果\(e^{-x}\)，右图是将y取了对数坐标后得到的\(\log(e^{-x})\)。需要说明的是，此算法在\(x\geq30\)时，得到的结果\(e^{-x}\)可能为负数，无法转化为对数，所以右图中会有一些点缺失（具体为\(x=30,50,60,90,100\)时）。
+
+观察上图可以发现，直接展开法在\(x\geq30\)时有较为明显的误差。
+
+    \subsection{递归法}\label{ux9012ux5f52ux6cd5}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:} \PY{k}{return} \PY{o}{\PYZhy{}} \PY{n}{s}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{*} \PY{n}{x} \PY{o}{/} \PY{n}{n}
+
+\PY{k}{def} \PY{n+nf}{iteration}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}return exp(\PYZhy{}x), using iteration\PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n+nb}{sum} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n+nb}{sum} \PY{o}{+}\PY{o}{=} \PY{n}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+        \PY{n}{n} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{k}{if} \PY{n+nb}{sum} \PY{o}{+} \PY{n}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{==} \PY{n+nb}{sum}\PY{p}{:} \PY{k}{break}
+    \PY{k}{return} \PY{n+nb}{sum}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{51}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{cmath} \PY{k+kn}{import} \PY{n}{log}
+\PY{k+kn}{import} \PY{n+nn}{math}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{time}
+
+\PY{n}{x} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{y\PYZus{}2} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{110}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+    \PY{n}{y\PYZus{}2}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{iteration}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mf}{7.5}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{121}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y\PYZus{}2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y\PYZus{}2}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{122}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{semilogy}\PY{p}{(}\PY{n}{x}\PY{p}{,}
+             \PY{n}{y\PYZus{}2}\PY{p}{,}
+             \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,}
+             \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dotted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{iteration}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,}
+             \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{hw1_files/hw1_7_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    上图左图是由递归法得到的结果\(e^{-x}\)，右图是将y取了对数坐标后得到的\(\log(e^{-x})\)。与第一问一样，此算法在\(x\geq30\)时，得到的结果\(e^{-x}\)可能为负数，无法转化为对数，所以右图中会有一些点缺失（具体为\(x=30,40,60,70,90,100\)时）。
+
+观察上图可以发现，直接展开法在\(x\geq30\)时有较为明显的误差。
+
+理论上，递归法的时间复杂度要低于直接展开法。
+
+    \subsection{先利用1.2计算\(e^x\)，然后求倒数}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if} \PY{n}{n} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{k}{return} \PY{l+m+mi}{1}
+    \PY{k}{else}\PY{p}{:} \PY{k}{return} \PY{n}{s}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{*} \PY{n}{x} \PY{o}{/} \PY{n}{n}
+
+
+\PY{k}{def} \PY{n+nf}{iteration\PYZus{}positive}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}return exp(x), using iteration\PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n+nb}{sum} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n+nb}{sum} \PY{o}{+}\PY{o}{=} \PY{n}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+        \PY{n}{n} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{k}{if} \PY{n}{s}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{k}{break}
+    \PY{k}{return} \PY{n+nb}{sum}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{cmath} \PY{k+kn}{import} \PY{n}{log}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+
+\PY{n}{x} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{y\PYZus{}3} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{110}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+    \PY{n}{y\PYZus{}3}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{n}{iteration\PYZus{}positive}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+\PY{n}{end} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,} \PY{l+m+mf}{7.5}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{121}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y\PYZus{}3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y\PYZus{}3}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{122}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{semilogy}\PY{p}{(}\PY{n}{x}\PY{p}{,}
+             \PY{n}{y\PYZus{}3}\PY{p}{,}
+             \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,}
+             \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dotted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{inverse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.7}\PY{p}{,}
+             \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{hw1_files/hw1_11_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    上图左图为运用方法3得到的结果\(e^{-x}\)，右图是将y取了对数坐标后得到的\(\log(e^{-x})\)。可以发现这种方法在\(x\)较大时精度明显提高，而且时间复杂度也与递归法相近。
+
+下面是三种方法求得的\(e^{-x}\)通过y对数坐标作出的图，可以明显看到方法(3)在精度上的优势。
+
+
+
+    \begin{center}
+    \adjustimage{max size={0.5\linewidth}{0.5\paperheight}}{hw1_files/hw1_13_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \section{矩阵的模和条件数}
+
+\subsection{计算A的行列式}
+
+上三角矩阵的行列式等于对角元的乘积，因而A的行列式显然是1，所以不是奇异矩阵。
+
+    \subsection{给出A的逆}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{55}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k}{def} \PY{n+nf}{get\PYZus{}A}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return matix A of n dim}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    input: n}
+\PY{l+s+sd}{    output: A of n dim}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{A} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{n}{A}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{o}{=}\PY{l+m+mi}{1}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{A}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+    \PY{k}{return} \PY{n}{A}
+
+\PY{k}{def} \PY{n+nf}{get\PYZus{}I}\PY{p}{(}\PY{n}{n}\PY{p}{:}\PY{n+nb}{int}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    input: n }
+\PY{l+s+sd}{    output: I of n dim}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{I} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{n}{I}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{o}{=}\PY{l+m+mi}{1}
+    \PY{k}{return} \PY{n}{I}
+
+\PY{k}{def} \PY{n+nf}{get\PYZus{}inverse}\PY{p}{(}\PY{n}{A}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    input: A}
+\PY{l+s+sd}{    output: A\PYZca{}\PYZob{}\PYZhy{}1\PYZcb{}}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{A}\PY{p}{)}
+    \PY{n}{big\PYZus{}matrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{A}\PY{p}{,}\PY{n}{get\PYZus{}I}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} \PY{c+c1}{\PYZsh{} 得到和I拼起来的大矩阵}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{big\PYZus{}matrix}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{n}{big\PYZus{}matrix}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+    \PY{k}{return} \PY{n}{big\PYZus{}matrix}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{n}\PY{p}{:}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} evaluate}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{get\PYZus{}inverse}\PY{p}{(}\PY{n}{get\PYZus{}A}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{get\PYZus{}inverse}\PY{p}{(}\PY{n}{get\PYZus{}A}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)} \PY{o}{@} \PY{n}{get\PYZus{}A}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[[1. 1. 2. 4. 8.]
+ [0. 1. 1. 2. 4.]
+ [0. 0. 1. 1. 2.]
+ [0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 1.]]
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+    \end{Verbatim}
+
+    上述程序给出了\(n=5\)时，\(A^{-1}\)的形式，可以看出: 
+\begin{equation}
+A^{-1}
+=
+\begin{bmatrix}
+1 & 1 & 2 & 4 & \dots & 2^{n-2}\\
+0 & 1 & 1 & 2 & \dots & 2^{n-3}\\
+\vdots & \vdots & \ddots & \ddots & 2 & \vdots\\
+0 & 0 & \cdots & 1 & 1 & 2\\
+0 & 0 & 0 & \cdots & 1 & 1\\
+0 & 0 & 0 & \cdots & 0 & 1
+\end{bmatrix}
+\end{equation}
+
+
+\subsection{证明:\(\Vert A \Vert_{\infty}=\max\limits_{i}\sum\limits_{j}\vert a_{ij}\vert\)}
+
+\begin{equation}
+\begin{aligned}
+\Vert x \Vert_{\infty} &= \max\limits_{i} \vert x_i\vert\\
+\Vert Ax \Vert_{\infty} &= \max\limits_{i} \vert\sum\limits_{j}a_{ij}x_{j}\vert\\
+\Vert A \Vert_{\infty} &= \sup\limits_{x\neq 0}\frac{\max\limits_{i} \vert\sum\limits_{j}a_{ij}x_{j}\vert}{\max\limits_{i} \vert x_i\vert}\\
+&=\max\limits_{i}\sum\limits_{j}\vert a_{ij}\vert\\
+\end{aligned}
+\end{equation}
+
+等式最后一行需要：取\(x\)使得\(a_{ij}x_{j}\)对任意\(j\)同号，且\(\vert x_j\vert\)相等。
+
+    \subsection{证明}\label{d-ux8bc1ux660e}
+
+1.
+\(\Vert U\Vert_2=\Vert U^{\dagger}\Vert_2=1\)
+
+\begin{equation}
+\begin{aligned}
+\Vert U\Vert_2=\Vert U^{\dagger}\Vert_2 = \left[\rho(U^{\dagger}U)\right]^{\frac{1}{2}}=\left[\rho(I)\right]^{\frac{1}{2}}=1
+\end{aligned}
+\end{equation}
+
+
+2.对任意A，\(\Vert UA\Vert_2=\Vert A\Vert_2\)
+
+\begin{equation}
+\begin{aligned}
+\Vert UA\Vert_2&=\left[\rho((UA)^{\dagger}UA)\right]^{\frac{1}{2}}=\left[\rho(A^{\dagger}U^{\dagger}UA)\right]^{\frac{1}{2}}=\left[\rho(A^{\dagger}A)\right]^{\frac{1}{2}}=\Vert A\Vert_2
+\end{aligned}
+\end{equation}
+
+
+\subsection{计算条件数}
+
+    \[
+\Vert A\Vert_\infty = n
+\] \[
+\Vert A^{-1}\Vert_\infty=1+1+2+4+\cdots+2^{n-2}=2^{n-1}
+\] \[
+\therefore K_{\infty}(A)=\Vert A\Vert_\infty \Vert A^{-1}\Vert_\infty=n\cdot 2^{n-1}
+\]
+
+    \section{ Hilbert 矩阵}
+
+\subsection{}
+
+要使\(D\)取极小值，说明： 
+\begin{equation}
+\frac{\partial D}{\partial c_i}=0
+\end{equation}
+
+同时根据\(D\)的表达式： 
+
+\begin{equation}
+\begin{aligned}
+\frac{\partial D}{\partial c_j}&=\int_{0}^{1} dx(\sum\limits_{i} c_i x^{i-1}-f(x))^2\\
+&=\int_{0}^{1} 2dx (\sum\limits_{i} c_i x^{i-1}-f(x))x^{j-1}\\
+&=2\sum\limits_{i} c_i\int_{0}^{1} x^{i+j-2} dx-2\int_{0}^{1} f(x)x^{j-1}dx\\
+&=2\sum\limits_{i} c_i\frac{1}{i+j-1}-2\int_{0}^{1} f(x)x^{j-1}dx\\
+\end{aligned}
+\end{equation}
+
+所以有，(这里更换了一下i和j的符号，并不影响结果)
+
+\[\sum\limits_{j} c_j\frac{1}{i+j-1}=\int_{0}^{1} f(x)x^{i-1}dx\]
+
+令:\((H_n)_{ij}=\frac{1}{i+j-1}, b_i=\int_{0}^{1} f(x)x^{i-1}dx\)，则有：
+\[\sum\limits_{j} (H_n)_{ij}c_j=b_i\]
+
+\subsection{说明\(H_n\)是对称的正定矩阵，进而论证它非奇异。}
+
+\begin{equation}
+\begin{aligned}
+c^{T}Hc&=\sum\limits_{i,j} H_{ij}x_ix_j\\
+    &=\sum\limits_{i,j} \frac{1}{i+j-1}x_ix_j\\
+    &=\int_{0}^{1}\sum\limits_{i,j} x_ix_jt^{i+j-2}dt\\
+    &=\int_{0}^{1}\sum\limits_{i,j} (x_it^{i-1})(x_jt^{j-1})dt\\
+    &=\int_{0}^{1}(\sum\limits_{i}x_i t^{i-1})^2dt\geq0\\
+\end{aligned}
+\end{equation}
+
+
+所以\(H_n\)为对称的正定矩阵，根据正定矩阵行列式为正，可知\(H_n\)非奇异。
+
+\begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Hilbert}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return hilbert matrix of n dim}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{H} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{p}{(}\PY{n}{i} \PY{o}{+} \PY{n}{j} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{return} \PY{n}{H}
+\end{Verbatim}
+\end{tcolorbox}
+
+\subsection{估计\(\det(H_n)\)的值}
+\subsubsection*{s1.
+直接通过严格表达式计算}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 直接求det(H\PYZus{}n)}
+\PY{k}{def} \PY{n+nf}{c}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return c\PYZus{}n}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{result} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:} \PY{n}{result} \PY{o}{*}\PY{o}{=} \PY{n}{j}
+
+    \PY{k}{return} \PY{n}{result}
+
+\PY{k}{def} \PY{n+nf}{det\PYZus{}H}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{p}{(}\PY{n}{c}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{4} \PY{o}{/} \PY{n}{c}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{n}\PY{p}{)}
+
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{when n = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{, det(Hn) = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{det\PYZus{}H}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+when n =  1 , det(Hn) =  1.0
+when n =  2 , det(Hn) =  0.08333333333333333
+when n =  3 , det(Hn) =  0.000462962962962963
+when n =  4 , det(Hn) =  1.6534391534391535e-07
+when n =  5 , det(Hn) =  3.749295132515087e-12
+when n =  6 , det(Hn) =  5.367299887358688e-18
+when n =  7 , det(Hn) =  4.835802623926117e-25
+when n =  8 , det(Hn) =  2.737050113791513e-33
+when n =  9 , det(Hn) =  9.720234311925e-43
+when n =  10 , det(Hn) =  2.164179226431492e-53
+    \end{Verbatim}
+
+\subsubsection*{s2.通过对严格表达式取对数降低复杂度}
+
+对\(det(H_n)\)取对数： \[\log (\det(H_n)) = 4 \log(c_n) - \log(c_{2n})\]
+
+\[
+\begin{aligned}
+\log(c_n)&=\log1+(\log1+\log2)+(\log1+\log2+\log3)+…+(\log1+…\log(n-1))\\
+&=(n-1)\log1+(n-2)\log2+…+(n-(n-1))\log(n-1)
+\end{aligned}
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} 通过取对数求det(Hn)}
+\PY{k}{def} \PY{n+nf}{log\PYZus{}c}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{n}{result} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{:} \PY{n}{result} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{n}{i}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log10}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+    \PY{k}{return} \PY{n}{result}
+
+\PY{k}{def} \PY{n+nf}{log\PYZus{}det\PYZus{}H}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{l+m+mi}{4} \PY{o}{*} \PY{n}{log\PYZus{}c}\PY{p}{(}\PY{n}{n}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{log\PYZus{}c}\PY{p}{(}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{n}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{get\PYZus{}from\PYZus{}log\PYZus{}det\PYZus{}H}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{l+m+mi}{10} \PY{o}{*}\PY{o}{*} \PY{n}{log\PYZus{}det\PYZus{}H}\PY{p}{(}\PY{n}{n}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{11}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{when n = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{i} \PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{, det(Hn) = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{get\PYZus{}from\PYZus{}log\PYZus{}det\PYZus{}H}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+when n =  1 , det(Hn) =  1.0
+when n =  2 , det(Hn) =  0.08333333333333333
+when n =  3 , det(Hn) =  0.0004629629629629632
+when n =  4 , det(Hn) =  1.6534391534391535e-07
+when n =  5 , det(Hn) =  3.74929513251509e-12
+when n =  6 , det(Hn) =  5.367299887358741e-18
+when n =  7 , det(Hn) =  4.835802623926148e-25
+when n =  8 , det(Hn) =  2.7370501137914296e-33
+when n =  9 , det(Hn) =  9.720234311925259e-43
+when n =  10 , det(Hn) =  2.164179226431472e-53
+    \end{Verbatim}
+
+\subsubsection*{s3. 对对数式进行估计以降低复杂度}
+
+\begin{equation}
+	\begin{aligned}
+		\ln(c_n)&=\ln1+(\ln1+\ln2)+…+(\ln1+…\ln(n-1))\\
+		&=\sum\limits_{i=1}^{n-1}(n-i)\ln i\\
+		&\approx\int_{1}^{n}(n-x)\ln xdx\\
+		&=\left. (n(x\ln x-x)-(\frac{x^2}{2} \ln{x}-\frac{x^2}{4}))\right|_{1}^{n}\\
+		&=n^2\ln n-n^2-\frac{n^2}{2} \ln{n}+\frac{n^2}{4}-(-n+\frac{1}{4})\\
+		&=\frac{n^2}{2} \ln n -\frac{3n^2}{4}-(-n+\frac{1}{4})\\
+	\end{aligned}
+\end{equation}
+\begin{equation}
+	\begin{aligned}
+		\ln (\det(H_n)) &= 4 \ln(c_n) - \ln(c_{2n})\\
+		&= 4\left[\frac{n^2}{2} \ln n -\frac{3n^2}{4}-(-n+\frac{1}{4})\right]-\left[2n^2 \ln 2n -3n^2-(-2n+\frac{1}{4})\right]\\
+		&=-2n^2 \ln 2+2n
+	\end{aligned}
+\end{equation}
+
+结果如下：
+\begin{Verbatim}[commandchars=\\\{\}]
+	when n =  1 , det(Hn) =  1.8472640247326626
+	when n =  2 , det(Hn) =  0.21327402356696973
+	when n =  3 , det(Hn) =  0.0015389587154111299
+	when n =  4 , det(Hn) =  6.940583668280697e-07
+	when n =  5 , det(Hn) =  1.9563431581210277e-11
+	when n =  6 , det(Hn) =  3.446466766384948e-17
+	when n =  7 , det(Hn) =  3.794750016915579e-24
+	when n =  8 , det(Hn) =  2.611393179409883e-32
+	when n =  9 , det(Hn) =  1.12315934960641e-41
+	when n =  10 , det(Hn) =  3.019190423321601e-52
+\end{Verbatim}
+
+
+\subsection{比较 GEM 和 Cholesky 分解求解线性方程
+\(H_n \cdot x = b\)}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Hilbert}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return hilbert matrix of n dim}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{H} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{p}{(}\PY{n}{i} \PY{o}{+} \PY{n}{j} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{return} \PY{n}{H}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{60}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{GEM}\PY{p}{(}\PY{n}{H}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return solution x of H * x = b through Gauss Elimination Method}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{c+c1}{\PYZsh{} 通过初等变换将矩阵化为上三角矩阵}
+    \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{H}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 此后的H均指增广矩阵}
+    \PY{n}{H} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{H}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{/} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{assert} \PY{n}{H}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}
+            \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{:}
+                \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{H}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}
+                \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{/} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} 将上三角增广矩阵通过初等变换转化为对角矩阵}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{H}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}
+    \PY{k}{return} \PY{n}{H}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{n}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{61}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{Cholesky}\PY{p}{(}\PY{n}{H}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    return solution x of H * x = b through Cholesky decomposition}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{c+c1}{\PYZsh{} cholesky decomposition}
+    \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{H}\PY{p}{)}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j}\PY{p}{)}\PY{p}{:}
+            \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{k} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+        \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{)}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{j} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j}\PY{p}{)}\PY{p}{:}
+                \PY{n}{H}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{k} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{k} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}
+            \PY{n}{H}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{H}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{/} \PY{n}{H}\PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{j} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{n}\PY{p}{)}\PY{p}{:}
+            \PY{n}{H}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+
+    \PY{c+c1}{\PYZsh{} 此时 H 是一个下三角矩阵}
+    \PY{n}{L} \PY{o}{=} \PY{n}{H}
+    \PY{c+c1}{\PYZsh{} 求 L y = b}
+    \PY{n}{L} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{H}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{/} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{k}{assert} \PY{n}{L}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}
+            \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{:}
+                \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{L}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}
+                \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{/} \PY{n}{L}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}
+    \PY{n}{y} \PY{o}{=} \PY{n}{L}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{n}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{} 下面求 H.T x = y}
+    \PY{n}{Lt} \PY{o}{=} \PY{n}{H}\PY{o}{.}\PY{n}{T}
+    \PY{n}{Lt} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{Lt}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{n}\PY{p}{]} \PY{o}{=} \PY{n}{y}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n}\PY{p}{)}\PY{p}{:}
+        \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{/} \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{i}\PY{p}{]}
+    \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{n} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{Lt}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{n}{Lt}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}
+
+    \PY{k}{return} \PY{n}{Lt}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{n}\PY{p}{]}
+
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{)}\PY{p}{:}
+    \PY{n}{H} \PY{o}{=} \PY{n}{Hilbert}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{i}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GEM :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{GEM}\PY{p}{(}\PY{n}{H}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Cho :}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{Cholesky}\PY{p}{(}\PY{n}{H}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+n =  1
+GEM : [1.]
+Cho : [1.]
+n =  2
+GEM : [-2.  6.]
+Cho : [-2.  6.]
+n =  3
+GEM : [  3. -24.  30.]
+Cho : [  3. -24.  30.]
+n =  4
+GEM : [  -4.   60. -180.  140.]
+Cho : [  -4.   60. -180.  140.]
+n =  5
+GEM : [    5.  -120.   630. -1120.   630.]
+Cho : [    5.  -120.   630. -1120.   630.]
+n =  6
+GEM : [-6.000e+00  2.100e+02 -1.680e+03  5.040e+03 -6.300e+03  2.772e+03]
+Cho : [-6.000e+00  2.100e+02 -1.680e+03  5.040e+03 -6.300e+03  2.772e+03]
+n =  7
+GEM : [ 7.00000003e+00 -3.36000001e+02  3.78000001e+03 -1.68000000e+04
+  3.46500001e+04 -3.32640001e+04  1.20120000e+04]
+Cho : [ 7.00000004e+00 -3.36000002e+02  3.78000002e+03 -1.68000001e+04
+  3.46500001e+04 -3.32640001e+04  1.20120000e+04]
+n =  8
+GEM : [-7.99999961e+00  5.03999976e+02 -7.55999966e+03  4.61999980e+04
+ -1.38599994e+05  2.16215992e+05 -1.68167994e+05  5.14799982e+04]
+Cho : [-7.99999983e+00  5.03999988e+02 -7.55999982e+03  4.61999989e+04
+ -1.38599997e+05  2.16215995e+05 -1.68167997e+05  5.14799990e+04]
+n =  9
+GEM : [ 8.99993240e+00 -7.19995227e+02  1.38599178e+04 -1.10879406e+05
+  4.50447797e+05 -1.00900346e+06  1.26125475e+06 -8.23676812e+05
+  2.18789208e+05]
+Cho : [ 8.99993937e+00 -7.19995739e+02  1.38599269e+04 -1.10879473e+05
+  4.50448049e+05 -1.00900399e+06  1.26125537e+06 -8.23677188e+05
+  2.18789302e+05]
+n =  10
+GEM : [-9.99748263e+00  9.89781815e+02 -2.37553432e+04  2.40197605e+05
+ -1.26105758e+06  3.78322315e+06 -6.72580589e+06  7.00039627e+06
+ -3.93775591e+06  9.23677917e+05]
+Cho : [-9.99766824e+00  9.89798372e+02 -2.37557034e+04  2.40200929e+05
+ -1.26107361e+06  3.78326758e+06 -6.72587926e+06  7.00046754e+06
+ -3.93779349e+06  9.23686209e+05]
+    \end{Verbatim}
+
+    可以看出，GEM算法与Cholesky算法在n较小时，给出的解一致，在n较大时，给出的解有些许偏差。我认为Cholesky算法精度更高，因为Cholesky分解对正定的厄米矩阵稳定性极佳。
+
+\section{级数求和与截断误差}
+
+\subsubsection{请求出 \(f (q^2)\) 在 \(q^2 = 0.5\)处的值}
+
+\begin{equation}
+f(q^2)=(\sum\limits_{\vec{n}\in\mathbb{Z}^3}-\int d^3 \vec{n})\frac{1}{\vert\vec{n}\vert^2-q^2}
+\end{equation}
+其中积分可以写出解析表达式， 
+\begin{equation}
+\begin{aligned}
+\int d^3 \vec{n}\frac{1}{\vert\vec{n}\vert^2-q^2} &= \int 4\pi r^2dr\frac{1}{r^2-q^2}\\
+&=4\pi\int(1+\frac{q^2}{r^2-q^2})dr\\
+&=4\pi r+4\pi q \int\frac{1}{(\frac{r}{q})^2-1}d(\frac{r}{q})\\
+&=\begin{cases}
+    4\pi r- 4\pi q\cdot tanh^{-1}(\frac{r}{q}) & r< q\\
+    4\pi r- 4\pi q\cdot tanh^{-1}(\frac{q}{r}) & r\geq q\\
+\end{cases}
+\end{aligned}
+\end{equation}
+
+
+    因而: \[
+f(q^2)=\sum\limits_{\vec{n}\in\mathbb{Z}^3}\frac{1}{\vert\vec{n}\vert^2-q^2}-4\pi(\Lambda-q\cdot tanh^{-1}(\frac{q}{\Lambda}))
+\] 
+下面用python和c++编写程序来计算上式。
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{62}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} python version}
+\PY{k+kn}{from} \PY{n+nn}{cmath} \PY{k+kn}{import} \PY{n}{tanh}
+\PY{k+kn}{import} \PY{n+nn}{math}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{tqdm} \PY{k+kn}{import} \PY{n}{tqdm}
+
+\PY{n}{r} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{q2} \PY{o}{=} \PY{l+m+mf}{0.5}
+\PY{n}{q} \PY{o}{=} \PY{n}{q2}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}
+\PY{n+nb}{sum} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{tqdm}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{r}\PY{p}{,} \PY{n}{r} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ylim} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{)}
+    \PY{k}{for} \PY{n}{y} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{ylim}\PY{p}{,} \PY{n}{ylim} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{zlim} \PY{o}{=} \PY{n+nb}{int}\PY{p}{(}\PY{p}{(}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{y}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{)}
+        \PY{k}{for} \PY{n}{z} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{zlim}\PY{p}{,} \PY{n}{zlim} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n+nb}{sum} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{p}{(}\PY{n}{x}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{y}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{z}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{q2}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{series = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{sum}\PY{p}{)}
+
+\PY{n}{inter} \PY{o}{=} \PY{l+m+mi}{4} \PY{o}{*} \PY{n}{math}\PY{o}{.}\PY{n}{pi} \PY{o}{*} \PY{p}{(}\PY{n}{r} \PY{o}{\PYZhy{}} \PY{n}{q} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{arctanh}\PY{p}{(}\PY{n}{q} \PY{o}{/} \PY{n}{r}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{integral = }\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{inter}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n+nb}{sum} \PY{o}{\PYZhy{}} \PY{n}{inter}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+100\%|██████████| 201/201 [00:05<00:00, 37.71it/s]
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+series =  1257.5870842531626
+integral =  1256.5742285356166
+1.0128557175460173
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+由于python运行速度较慢，改用c++编写程序，程序放在\url{q4.cpp}。
+
+
+c++的运行到\(\Lambda=1000\)的结果为，\(f=1.09745\)。
+
+所以，估计结果约为\(1.1\)。
+
+\subsection{引入\(\Lambda\)需要多大可以使\(f\)精度达到\(10^{-5}\)?}
+大约需要\(\Lambda\)达到\(10^5\)数量级。
+
+\subsection{}
+
+    我们可以发现，原先主要的计算复杂度源于我们试图对三维矢量\(\vec{n}\)求和，可以将其转化为对\(\vert\vec{n}\vert^{2}\)求和，即
+
+\[
+\sum\limits_{
+	\vec { n }
+	\in\mathbb{Z} ^ 3}\frac{1}{\vert\vec{n}\vert^2-q^2}=\sum\limits_{
+	r ^ 2\leq\Lambda ^ 2}\frac{c(r^2)}{
+	r ^ 2 - q ^ 2}\overset{
+	r ^ 2\triangleq\gamma}{
+	=}\sum\limits_{
+	\gamma\leq\Lambda ^ 2}\frac{c'(\gamma)}{\gamma-q^2}
+\]
+
+要计算右式，计算复杂度主要在于对于每一个\( \gamma \)，如何计算其系数\(c'(\gamma)\).\(c'(\gamma)\)代表着\(\gamma\)有多少种分解方式可以分解成三个有序整数的平方和。有两种思路：第一种是分解的思路，对\(\gamma\)从1遍历到\(\Lambda^2\)，判断\(\gamma\)是否可分解；第二种是组合的思路，从1到\(\Lambda\)，看这些数能够生成多少种无序三元组。不幸的是，第一种思路的计算复杂度比原先的做法还要高，因此采取第二种思路。
+
+第三种思路需要分类讨论：我们考虑第一卦限中的格点\((x,y,z)\) 
+
+1.
+\(x,y,z\neq 0\) 
+
+
+\begin{itemize}
+\item
+ \(x,y,z\)均不相等
+
+{
+}
+在$1\to\Lambda$中抽取三个数：$O(\Lambda)\sim C_\Lambda ^ { 3 } $
+
+这个情况下$\gamma = x ^ 2 + y ^ 2 + z ^ 2 $在一个卦限内需要被重复计算6次
+\item
+\(x, y, z\)中有两个相等
+
+{
+}
+在\(1\to\Lambda\)中抽取两个数：\(O(\Lambda)\sim C_\Lambda ^ { 2 }\)
+
+这个情况下\(\gamma = x ^ 2 + y ^ 2 + z ^ 2\) 在一个卦限内需要被重复计算3次
+\item
+\(x, y, z\)均相等
+
+{
+}
+在\(1\to\Lambda\)中抽取一个数：\(O(\Lambda)\sim C_\Lambda ^ {1} =\Lambda\)
+
+这个情况下\(\gamma = x ^ 2 + y ^ 2 + z ^ 2\) 在一个卦限内需要被重复计算1次
+\end{itemize}
+
+2. \(x, y, z\)中有数为0
+
+此情况中的计算复杂度远低于上面的，在\(\Lambda\)极大时可以略去
+
+
+综上，可以发现这个方法的复杂度在\(O(\Lambda)\sim C_\Lambda ^ { 3 }\)
+
+% Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
